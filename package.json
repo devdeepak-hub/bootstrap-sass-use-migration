@@ -14,5 +14,13 @@
     "bootstrap": "^4.5.0",
     "sass-migrator": "^1.2.2",
     "ncp": "^2.0.0"
-  }
+  },
+  "sass": "scss/bootstrap.scss",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepak0174/bootstrap-sass-use-migration.git"
+  },
+  "files": [
+    "scss/**/*.scss"
+  ]
 }
