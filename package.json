@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-sass-use-migration",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Bootstrap scss code to support latest sass feature @use",
   "main": "index.js",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "move": "ncp ./changes/ ./scss",
     "build": "npm run copy-files && npm run migrate && npm run move"
   },
-  "dependencies": {
+  "devDependencies": {
     "bootstrap": "^4.5.0",
     "ncp": "^2.0.0",
     "sass-migrator": "^1.2.2"
