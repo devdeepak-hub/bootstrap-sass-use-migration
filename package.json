@@ -1,7 +1,7 @@
 {
   "name": "bootstrap-sass-use-migration",
   "version": "1.0.0",
-  "description": "Bootstrap scss files are migrated",
+  "description": "Bootstrap scss code to support latest sass feature @use",
   "main": "index.js",
   "license": "MIT",
   "author": "contactdevdeepak <contactdevdeepak@gmail.com>",
