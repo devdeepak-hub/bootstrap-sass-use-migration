@@ -5,8 +5,8 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-@use "functions";
-@use "variables";
+@forward "functions" hide assert-ascending, assert-starts-at-zero;
+@forward "variables";
 @use "mixins";
 @use "root";
 @use "reboot";
@@ -42,3 +42,36 @@
 @use "spinners";
 @use "utilities";
 @use "print";
+
+@forward "mixins/alert";
+@forward "mixins/background-variant";
+@forward "mixins/badge";
+@forward "mixins/border-radius";
+@forward "mixins/box-shadow";
+@forward "mixins/breakpoints";
+@forward "mixins/buttons";
+@forward "mixins/caret";
+@forward "mixins/clearfix";
+@forward "mixins/deprecate";
+@forward "mixins/float";
+@forward "mixins/forms";
+@forward "mixins/gradients";
+@forward "mixins/grid";
+@forward "mixins/grid-framework";
+@forward "mixins/hover";
+@forward "mixins/image";
+@forward "mixins/list-group";
+@forward "mixins/lists";
+@forward "mixins/nav-divider";
+@forward "mixins/pagination";
+@forward "mixins/reset-text";
+@forward "mixins/resize";
+@forward "mixins/screen-reader";
+@forward "mixins/size";
+@forward "mixins/table-row";
+@forward "mixins/text-emphasis";
+@forward "mixins/text-hide";
+@forward "mixins/text-truncate";
+@forward "mixins/transition";
+@forward "mixins/visibility";
+@forward "vendor/rfs";
