@@ -22,5 +22,13 @@
   },
   "files": [
     "scss/**/*.scss"
+  ],
+  "keywords": [
+    "scss",
+    "sass",
+    "bootstrap",
+    "@use",
+    "latestScss",
+    "@useMigration"
   ]
 }
