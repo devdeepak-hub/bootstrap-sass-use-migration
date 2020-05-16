@@ -1,0 +1,18 @@
+{
+  "name": "bootstrap-sass-use-migration",
+  "version": "1.0.0",
+  "description": "Bootstrap scss files are migrated",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "contactdevdeepak <contactdevdeepak@gmail.com>",
+  "scripts":{
+	  "copy-files":"ncp ./node_modules/bootstrap/scss/ ./scss",
+	  "migrate": "sass-migrator module --verbose --migrate-deps scss/bootstrap.scss",
+	  "build":"npm run copy-files && npm run migrate"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "sass-migrator": "^1.2.2",
+    "ncp": "^2.0.0"
+  }
+}

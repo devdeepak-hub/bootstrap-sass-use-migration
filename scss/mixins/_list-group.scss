@@ -1,0 +1,25 @@
+@use "sass:color";
+@use "../variables";
+@use "hover";
+
+// List Groups
+
+@mixin list-group-item-variant($state, $background, $color) {
+  .list-group-item-#{$state} {
+    color: $color;
+    background-color: $background;
+
+    &.list-group-item-action {
+      @include hover.hover-focus() {
+        color: $color;
+        background-color: color.adjust($background, $lightness: -5%);
+      }
+
+      &.active {
+        color: variables.$white;
+        background-color: $color;
+        border-color: $color;
+      }
+    }
+  }
+}

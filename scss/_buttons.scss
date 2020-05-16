@@ -1,0 +1,148 @@
+@use "mixins/box-shadow";
+@use "mixins/buttons";
+@use "mixins/hover";
+@use "mixins/transition";
+@use "variables";
+
+// stylelint-disable selector-no-qualifying-type
+
+//
+// Base styles
+//
+
+.btn {
+  display: inline-block;
+  font-family: variables.$btn-font-family;
+  font-weight: variables.$btn-font-weight;
+  color: variables.$body-color;
+  text-align: center;
+  text-decoration: if(variables.$link-decoration == none, null, none);
+  white-space: variables.$btn-white-space;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: variables.$btn-border-width solid transparent;
+  @include buttons.button-size(variables.$btn-padding-y, variables.$btn-padding-x, variables.$btn-font-size, variables.$btn-line-height, variables.$btn-border-radius);
+  @include transition.transition(variables.$btn-transition);
+
+  @include hover.hover() {
+    color: variables.$body-color;
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: variables.$btn-focus-box-shadow;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    opacity: variables.$btn-disabled-opacity;
+    @include box-shadow.box-shadow(none);
+  }
+
+  &:not(:disabled):not(.disabled) {
+    cursor: if(variables.$enable-pointer-cursor-for-buttons, pointer, null);
+
+    &:active,
+    &.active {
+      @include box-shadow.box-shadow(variables.$btn-active-box-shadow);
+
+      &:focus {
+        @include box-shadow.box-shadow(variables.$btn-focus-box-shadow, variables.$btn-active-box-shadow);
+      }
+    }
+  }
+}
+
+// Future-proof disabling of clicks on `<a>` elements
+a.btn.disabled,
+fieldset:disabled a.btn {
+  pointer-events: none;
+}
+
+
+//
+// Alternate buttons
+//
+
+@each $color, $value in variables.$theme-colors {
+  .btn-#{$color} {
+    @include buttons.button-variant($value, $value);
+  }
+}
+
+@each $color, $value in variables.$theme-colors {
+  .btn-outline-#{$color} {
+    @include buttons.button-outline-variant($value);
+  }
+}
+
+
+//
+// Link buttons
+//
+
+// Make a button look and behave like a link
+.btn-link {
+  font-weight: variables.$font-weight-normal;
+  color: variables.$link-color;
+  text-decoration: variables.$link-decoration;
+
+  @include hover.hover() {
+    color: variables.$link-hover-color;
+    text-decoration: variables.$link-hover-decoration;
+  }
+
+  &:focus,
+  &.focus {
+    text-decoration: variables.$link-hover-decoration;
+  }
+
+  &:disabled,
+  &.disabled {
+    color: variables.$btn-link-disabled-color;
+    pointer-events: none;
+  }
+
+  // No need for an active state here
+}
+
+
+//
+// Button Sizes
+//
+
+.btn-lg {
+  @include buttons.button-size(variables.$btn-padding-y-lg, variables.$btn-padding-x-lg, variables.$btn-font-size-lg, variables.$btn-line-height-lg, variables.$btn-border-radius-lg);
+}
+
+.btn-sm {
+  @include buttons.button-size(variables.$btn-padding-y-sm, variables.$btn-padding-x-sm, variables.$btn-font-size-sm, variables.$btn-line-height-sm, variables.$btn-border-radius-sm);
+}
+
+
+//
+// Block button
+//
+
+.btn-block {
+  display: block;
+  width: 100%;
+
+  // Vertically space out multiple block buttons
+  + .btn-block {
+    margin-top: variables.$btn-block-spacing-y;
+  }
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  &.btn-block {
+    width: 100%;
+  }
+}

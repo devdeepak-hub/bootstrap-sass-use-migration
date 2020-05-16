@@ -1,0 +1,125 @@
+@use "mixins/border-radius";
+@use "mixins/hover";
+@use "variables";
+
+// Base class
+//
+// Kickstart any navigation component with a set of style resets. Works with
+// `<nav>`s, `<ul>`s or `<ol>`s.
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: variables.$nav-link-padding-y variables.$nav-link-padding-x;
+  text-decoration: if(variables.$link-decoration == none, null, none);
+
+  @include hover.hover-focus() {
+    text-decoration: none;
+  }
+
+  // Disabled state lightens text
+  &.disabled {
+    color: variables.$nav-link-disabled-color;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+//
+// Tabs
+//
+
+.nav-tabs {
+  border-bottom: variables.$nav-tabs-border-width solid variables.$nav-tabs-border-color;
+
+  .nav-item {
+    margin-bottom: -(variables.$nav-tabs-border-width);
+  }
+
+  .nav-link {
+    border: variables.$nav-tabs-border-width solid transparent;
+    @include border-radius.border-top-radius(variables.$nav-tabs-border-radius);
+
+    @include hover.hover-focus() {
+      border-color: variables.$nav-tabs-link-hover-border-color;
+    }
+
+    &.disabled {
+      color: variables.$nav-link-disabled-color;
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  .nav-link.active,
+  .nav-item.show .nav-link {
+    color: variables.$nav-tabs-link-active-color;
+    background-color: variables.$nav-tabs-link-active-bg;
+    border-color: variables.$nav-tabs-link-active-border-color;
+  }
+
+  .dropdown-menu {
+    // Make dropdown border overlap tab border
+    margin-top: -(variables.$nav-tabs-border-width);
+    // Remove the top rounded corners here since there is a hard edge above the menu
+    @include border-radius.border-top-radius(0);
+  }
+}
+
+
+//
+// Pills
+//
+
+.nav-pills {
+  .nav-link {
+    @include border-radius.border-radius(variables.$nav-pills-border-radius);
+  }
+
+  .nav-link.active,
+  .show > .nav-link {
+    color: variables.$nav-pills-link-active-color;
+    background-color: variables.$nav-pills-link-active-bg;
+  }
+}
+
+
+//
+// Justified variants
+//
+
+.nav-fill {
+  .nav-item {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+.nav-justified {
+  .nav-item {
+    flex-basis: 0;
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+
+// Tabbable tabs
+//
+// Hide tabbable panes to start, show them when `.active`
+
+.tab-content {
+  > .tab-pane {
+    display: none;
+  }
+  > .active {
+    display: block;
+  }
+}

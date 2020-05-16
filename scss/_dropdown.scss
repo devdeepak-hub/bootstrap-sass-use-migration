@@ -1,0 +1,203 @@
+@use "sass:map";
+@use "mixins/border-radius";
+@use "mixins/box-shadow";
+@use "mixins/breakpoints";
+@use "mixins/caret";
+@use "mixins/gradients";
+@use "mixins/hover";
+@use "mixins/nav-divider";
+@use "variables";
+@use "vendor/rfs";
+
+// The dropdown wrapper (`<div>`)
+.dropup,
+.dropright,
+.dropdown,
+.dropleft {
+  position: relative;
+}
+
+.dropdown-toggle {
+  white-space: nowrap;
+
+  // Generate the caret automatically
+  @include caret.caret();
+}
+
+// The dropdown menu
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: variables.$zindex-dropdown;
+  display: none; // none by default, but block on "open" of the menu
+  float: left;
+  min-width: variables.$dropdown-min-width;
+  padding: variables.$dropdown-padding-y 0;
+  margin: variables.$dropdown-spacer 0 0; // override default ul
+  @include rfs.font-size(variables.$dropdown-font-size);
+  color: variables.$dropdown-color;
+  text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+  list-style: none;
+  background-color: variables.$dropdown-bg;
+  background-clip: padding-box;
+  border: variables.$dropdown-border-width solid variables.$dropdown-border-color;
+  @include border-radius.border-radius(variables.$dropdown-border-radius);
+  @include box-shadow.box-shadow(variables.$dropdown-box-shadow);
+}
+
+@each $breakpoint in map.keys(variables.$grid-breakpoints) {
+  @include breakpoints.media-breakpoint-up($breakpoint) {
+    $infix: breakpoints.breakpoint-infix($breakpoint, variables.$grid-breakpoints);
+
+    .dropdown-menu#{$infix}-left {
+      right: auto;
+      left: 0;
+    }
+
+    .dropdown-menu#{$infix}-right {
+      right: 0;
+      left: auto;
+    }
+  }
+}
+
+// Allow for dropdowns to go bottom up (aka, dropup-menu)
+// Just add .dropup after the standard .dropdown class and you're set.
+.dropup {
+  .dropdown-menu {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: variables.$dropdown-spacer;
+  }
+
+  .dropdown-toggle {
+    @include caret.caret(up);
+  }
+}
+
+.dropright {
+  .dropdown-menu {
+    top: 0;
+    right: auto;
+    left: 100%;
+    margin-top: 0;
+    margin-left: variables.$dropdown-spacer;
+  }
+
+  .dropdown-toggle {
+    @include caret.caret(right);
+    &::after {
+      vertical-align: 0;
+    }
+  }
+}
+
+.dropleft {
+  .dropdown-menu {
+    top: 0;
+    right: 100%;
+    left: auto;
+    margin-top: 0;
+    margin-right: variables.$dropdown-spacer;
+  }
+
+  .dropdown-toggle {
+    @include caret.caret(left);
+    &::before {
+      vertical-align: 0;
+    }
+  }
+}
+
+// When enabled Popper.js, reset basic dropdown position
+// stylelint-disable-next-line no-duplicate-selectors
+.dropdown-menu {
+  &[x-placement^="top"],
+  &[x-placement^="right"],
+  &[x-placement^="bottom"],
+  &[x-placement^="left"] {
+    right: auto;
+    bottom: auto;
+  }
+}
+
+// Dividers (basically an `<hr>`) within the dropdown
+.dropdown-divider {
+  @include nav-divider.nav-divider(variables.$dropdown-divider-bg, variables.$dropdown-divider-margin-y, true);
+}
+
+// Links, buttons, and more within the dropdown menu
+//
+// `<button>`-specific styles are denoted with `// For <button>s`
+.dropdown-item {
+  display: block;
+  width: 100%; // For `<button>`s
+  padding: variables.$dropdown-item-padding-y variables.$dropdown-item-padding-x;
+  clear: both;
+  font-weight: variables.$font-weight-normal;
+  color: variables.$dropdown-link-color;
+  text-align: inherit; // For `<button>`s
+  text-decoration: if(variables.$link-decoration == none, null, none);
+  white-space: nowrap; // prevent links from randomly breaking onto new lines
+  background-color: transparent; // For `<button>`s
+  border: 0; // For `<button>`s
+
+  // Prevent dropdown overflow if there's no padding
+  // See https://github.com/twbs/bootstrap/pull/27703
+  @if variables.$dropdown-padding-y == 0 {
+    &:first-child {
+      @include border-radius.border-top-radius(variables.$dropdown-inner-border-radius);
+    }
+
+    &:last-child {
+      @include border-radius.border-bottom-radius(variables.$dropdown-inner-border-radius);
+    }
+  }
+
+  @include hover.hover-focus() {
+    color: variables.$dropdown-link-hover-color;
+    text-decoration: none;
+    @include gradients.gradient-bg(variables.$dropdown-link-hover-bg);
+  }
+
+  &.active,
+  &:active {
+    color: variables.$dropdown-link-active-color;
+    text-decoration: none;
+    @include gradients.gradient-bg(variables.$dropdown-link-active-bg);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: variables.$dropdown-link-disabled-color;
+    pointer-events: none;
+    background-color: transparent;
+    // Remove CSS gradients if they're enabled
+    @if variables.$enable-gradients {
+      background-image: none;
+    }
+  }
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+// Dropdown section headers
+.dropdown-header {
+  display: block;
+  padding: variables.$dropdown-header-padding;
+  margin-bottom: 0; // for use with heading elements
+  @include rfs.font-size(variables.$font-size-sm);
+  color: variables.$dropdown-header-color;
+  white-space: nowrap; // as with > li > a
+}
+
+// Dropdown text
+.dropdown-item-text {
+  display: block;
+  padding: variables.$dropdown-item-padding-y variables.$dropdown-item-padding-x;
+  color: variables.$dropdown-link-color;
+}

@@ -1,0 +1,54 @@
+@use "mixins/border-radius";
+@use "mixins/box-shadow";
+@use "mixins/gradients";
+@use "mixins/transition";
+@use "variables";
+@use "vendor/rfs";
+
+// Disable animation if transitions are disabled
+@if variables.$enable-transitions {
+  @keyframes progress-bar-stripes {
+    from { background-position: variables.$progress-height 0; }
+    to { background-position: 0 0; }
+  }
+}
+
+.progress {
+  display: flex;
+  height: variables.$progress-height;
+  overflow: hidden; // force rounded corners by cropping it
+  line-height: 0;
+  @include rfs.font-size(variables.$progress-font-size);
+  background-color: variables.$progress-bg;
+  @include border-radius.border-radius(variables.$progress-border-radius);
+  @include box-shadow.box-shadow(variables.$progress-box-shadow);
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  color: variables.$progress-bar-color;
+  text-align: center;
+  white-space: nowrap;
+  background-color: variables.$progress-bar-bg;
+  @include transition.transition(variables.$progress-bar-transition);
+}
+
+.progress-bar-striped {
+  @include gradients.gradient-striped();
+  background-size: variables.$progress-height variables.$progress-height;
+}
+
+@if variables.$enable-transitions {
+  .progress-bar-animated {
+    animation: progress-bar-stripes variables.$progress-bar-animation-timing;
+
+    @if variables.$enable-prefers-reduced-motion-media-query {
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+}

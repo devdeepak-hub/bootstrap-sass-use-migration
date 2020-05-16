@@ -1,0 +1,79 @@
+@use "mixins/border-radius";
+@use "mixins/lists";
+@use "mixins/pagination";
+@use "variables";
+
+.pagination {
+  display: flex;
+  @include lists.list-unstyled();
+  @include border-radius.border-radius();
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: variables.$pagination-padding-y variables.$pagination-padding-x;
+  margin-left: -(variables.$pagination-border-width);
+  line-height: variables.$pagination-line-height;
+  color: variables.$pagination-color;
+  text-decoration: if(variables.$link-decoration == none, null, none);
+  background-color: variables.$pagination-bg;
+  border: variables.$pagination-border-width solid variables.$pagination-border-color;
+
+  &:hover {
+    z-index: 2;
+    color: variables.$pagination-hover-color;
+    text-decoration: none;
+    background-color: variables.$pagination-hover-bg;
+    border-color: variables.$pagination-hover-border-color;
+  }
+
+  &:focus {
+    z-index: 3;
+    outline: variables.$pagination-focus-outline;
+    box-shadow: variables.$pagination-focus-box-shadow;
+  }
+}
+
+.page-item {
+  &:first-child {
+    .page-link {
+      margin-left: 0;
+      @include border-radius.border-left-radius(variables.$border-radius);
+    }
+  }
+  &:last-child {
+    .page-link {
+      @include border-radius.border-right-radius(variables.$border-radius);
+    }
+  }
+
+  &.active .page-link {
+    z-index: 3;
+    color: variables.$pagination-active-color;
+    background-color: variables.$pagination-active-bg;
+    border-color: variables.$pagination-active-border-color;
+  }
+
+  &.disabled .page-link {
+    color: variables.$pagination-disabled-color;
+    pointer-events: none;
+    // Opinionated: remove the "hand" cursor set previously for .page-link
+    cursor: auto;
+    background-color: variables.$pagination-disabled-bg;
+    border-color: variables.$pagination-disabled-border-color;
+  }
+}
+
+
+//
+// Sizing
+//
+
+.pagination-lg {
+  @include pagination.pagination-size(variables.$pagination-padding-y-lg, variables.$pagination-padding-x-lg, variables.$font-size-lg, variables.$line-height-lg, variables.$border-radius-lg);
+}
+
+.pagination-sm {
+  @include pagination.pagination-size(variables.$pagination-padding-y-sm, variables.$pagination-padding-x-sm, variables.$font-size-sm, variables.$line-height-sm, variables.$border-radius-sm);
+}

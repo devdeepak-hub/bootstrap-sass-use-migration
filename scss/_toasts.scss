@@ -1,0 +1,48 @@
+@use "mixins/border-radius";
+@use "variables";
+@use "vendor/rfs";
+
+.toast {
+  max-width: variables.$toast-max-width;
+  overflow: hidden; // cheap rounded corners on nested items
+  @include rfs.font-size(variables.$toast-font-size);
+  color: variables.$toast-color;
+  background-color: variables.$toast-background-color;
+  background-clip: padding-box;
+  border: variables.$toast-border-width solid variables.$toast-border-color;
+  box-shadow: variables.$toast-box-shadow;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  @include border-radius.border-radius(variables.$toast-border-radius);
+
+  &:not(:last-child) {
+    margin-bottom: variables.$toast-padding-x;
+  }
+
+  &.showing {
+    opacity: 1;
+  }
+
+  &.show {
+    display: block;
+    opacity: 1;
+  }
+
+  &.hide {
+    display: none;
+  }
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  padding: variables.$toast-padding-y variables.$toast-padding-x;
+  color: variables.$toast-header-color;
+  background-color: variables.$toast-header-background-color;
+  background-clip: padding-box;
+  border-bottom: variables.$toast-border-width solid variables.$toast-header-border-color;
+}
+
+.toast-body {
+  padding: variables.$toast-padding-x; // apply to both vertical and horizontal
+}

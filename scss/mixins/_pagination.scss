@@ -1,0 +1,25 @@
+@use "../vendor/rfs";
+@use "border-radius";
+
+// Pagination
+
+@mixin pagination-size($padding-y, $padding-x, $font-size, $line-height, $border-radius) {
+  .page-link {
+    padding: $padding-y $padding-x;
+    @include rfs.font-size($font-size);
+    line-height: $line-height;
+  }
+
+  .page-item {
+    &:first-child {
+      .page-link {
+        @include border-radius.border-left-radius($border-radius);
+      }
+    }
+    &:last-child {
+      .page-link {
+        @include border-radius.border-right-radius($border-radius);
+      }
+    }
+  }
+}

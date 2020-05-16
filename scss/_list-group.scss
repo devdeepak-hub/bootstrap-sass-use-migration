@@ -1,0 +1,162 @@
+@use "sass:map";
+@use "functions";
+@use "mixins/border-radius";
+@use "mixins/breakpoints";
+@use "mixins/hover";
+@use "mixins/list-group";
+@use "variables";
+
+// Base class
+//
+// Easily usable on <ul>, <ol>, or <div>.
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+
+  // No need to set list-style: none; since .list-group-item is block level
+  padding-left: 0; // reset padding because ul and ol
+  margin-bottom: 0;
+  @include border-radius.border-radius(variables.$list-group-border-radius);
+}
+
+
+// Interactive list items
+//
+// Use anchor or button elements instead of `li`s or `div`s to create interactive
+// list items. Includes an extra `.active` modifier class for selected items.
+
+.list-group-item-action {
+  width: 100%; // For `<button>`s (anchors become 100% by default though)
+  color: variables.$list-group-action-color;
+  text-align: inherit; // For `<button>`s (anchors inherit)
+
+  // Hover state
+  @include hover.hover-focus() {
+    z-index: 1; // Place hover/focus items above their siblings for proper border styling
+    color: variables.$list-group-action-hover-color;
+    text-decoration: none;
+    background-color: variables.$list-group-hover-bg;
+  }
+
+  &:active {
+    color: variables.$list-group-action-active-color;
+    background-color: variables.$list-group-action-active-bg;
+  }
+}
+
+
+// Individual list items
+//
+// Use on `li`s or `div`s within the `.list-group` parent.
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: variables.$list-group-item-padding-y variables.$list-group-item-padding-x;
+  color: variables.$list-group-color;
+  text-decoration: if(variables.$link-decoration == none, null, none);
+  background-color: variables.$list-group-bg;
+  border: variables.$list-group-border-width solid variables.$list-group-border-color;
+
+  &:first-child {
+    @include border-radius.border-top-radius(inherit);
+  }
+
+  &:last-child {
+    @include border-radius.border-bottom-radius(inherit);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: variables.$list-group-disabled-color;
+    pointer-events: none;
+    background-color: variables.$list-group-disabled-bg;
+  }
+
+  // Include both here for `<a>`s and `<button>`s
+  &.active {
+    z-index: 2; // Place active items above their siblings for proper border styling
+    color: variables.$list-group-active-color;
+    background-color: variables.$list-group-active-bg;
+    border-color: variables.$list-group-active-border-color;
+  }
+
+  & + & {
+    border-top-width: 0;
+
+    &.active {
+      margin-top: -(variables.$list-group-border-width);
+      border-top-width: variables.$list-group-border-width;
+    }
+  }
+}
+
+
+// Horizontal
+//
+// Change the layout of list group items from vertical (default) to horizontal.
+
+@each $breakpoint in map.keys(variables.$grid-breakpoints) {
+  @include breakpoints.media-breakpoint-up($breakpoint) {
+    $infix: breakpoints.breakpoint-infix($breakpoint, variables.$grid-breakpoints);
+
+    .list-group-horizontal#{$infix} {
+      flex-direction: row;
+
+      > .list-group-item {
+        &:first-child {
+          @include border-radius.border-bottom-left-radius(variables.$list-group-border-radius);
+          @include border-radius.border-top-right-radius(0);
+        }
+
+        &:last-child {
+          @include border-radius.border-top-right-radius(variables.$list-group-border-radius);
+          @include border-radius.border-bottom-left-radius(0);
+        }
+
+        &.active {
+          margin-top: 0;
+        }
+
+        & + .list-group-item {
+          border-top-width: variables.$list-group-border-width;
+          border-left-width: 0;
+
+          &.active {
+            margin-left: -(variables.$list-group-border-width);
+            border-left-width: variables.$list-group-border-width;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// Flush list items
+//
+// Remove borders and border-radius to keep list group items edge-to-edge. Most
+// useful within other components (e.g., cards).
+
+.list-group-flush {
+  @include border-radius.border-radius(0);
+
+  > .list-group-item {
+    border-width: 0 0 variables.$list-group-border-width;
+
+    &:last-child {
+      border-bottom-width: 0;
+    }
+  }
+}
+
+
+// Contextual variants
+//
+// Add modifier classes to change text and background color on individual items.
+// Organizationally, this must come after the `:hover` states.
+
+@each $color, $value in variables.$theme-colors {
+  @include list-group.list-group-item-variant($color, functions.theme-color-level($color, -9), functions.theme-color-level($color, 6));
+}
